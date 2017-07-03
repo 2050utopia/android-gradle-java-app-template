@@ -1,50 +1,45 @@
 package burrows.apps.example.template.activity;
 
-import android.os.Bundle;
-
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.util.ActivityController;
+import test.RoboTestBase;
 
-import burrows.apps.example.template.test.TestBase;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.robolectric.Robolectric.buildActivity;
 
 /**
+ * Robolectric test.
+ *
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
- * @since 0.0.1
  */
-@RunWith(RobolectricGradleTestRunner.class)
-public class MainActivityTest extends TestBase {
+public class MainActivityTest extends RoboTestBase {
+    private ActivityController<MainActivity> mController;
+    private MainActivity sut;
 
-    @Test
-    public void test_notNull() {
-        MainActivity mainActivity = buildActivity(MainActivity.class)
-                .create()
-                .start()
-                .resume()
-                .pause()
-                .destroy()
-                .visible()
-                .get();
-        assertThat(mainActivity, not(nullValue()));
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        // Create new activity
+        this.mController = buildActivity(MainActivity.class);
+        this.sut = this.mController.create().postCreate(null).start().resume().visible().get();
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+
+        // Destroy activity
+        this.mController.pause().stop().destroy();
+        this.sut.finish();
     }
 
     @Test
-    public void test_onCreate_notNull() {
-        Bundle savedInstanceState = new Bundle();
-        MainActivity mainActivity = Robolectric.buildActivity(MainActivity.class)
-                .create(savedInstanceState)
-                .start()
-                .resume()
-                .pause()
-                .destroy()
-                .visible()
-                .get();
-        assertThat(mainActivity, not(nullValue()));
+    public void testOnCreateNotNull() {
+        assertThat(this.sut).isNotNull();
     }
 }

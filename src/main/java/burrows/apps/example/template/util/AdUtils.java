@@ -4,11 +4,10 @@ import com.google.android.gms.ads.AdRequest;
 
 /**
  * @author <a href="mailto:jaredsburrows@gmail.com">Jared Burrows</a>
- * @since 0.0.1
  */
 public final class AdUtils {
-
-    private AdUtils() {}
+    private AdUtils() {
+    }
 
     public static String getErrorReason(final int errorCode) {
         switch (errorCode) {
